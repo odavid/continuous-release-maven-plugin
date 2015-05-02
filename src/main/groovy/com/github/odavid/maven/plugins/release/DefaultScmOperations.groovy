@@ -20,7 +20,7 @@ class DefaultScmOperations implements ScmOperations{
 	public void tagWorkspace(File basedir, String tagName) {
 		ScmFileSet scmFileSet = new ScmFileSet(basedir)
 		ScmTagParameters params = new ScmTagParameters("Tagging release: ${tagName}")
-		scmManager.tag(scmRepository, scmFileSet, tagName, params)
+		scmManager.tag(scmRepository, scmFileSet, tagName, "TAG: ${tagName}")
 	}
 
 }

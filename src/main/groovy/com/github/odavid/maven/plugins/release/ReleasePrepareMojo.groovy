@@ -93,6 +93,9 @@ class ReleasePrepareMojo extends GroovyMojoWithAntLogger{
 			ScmOperations scmOperations = createScmOperations(scmUrl)
 			log.info("Committing release info file")
 			scmOperations.commitReleaseInfo(releaseInfoFile, "releas-info")
+			log.info("Tagging workspace")
+			scmOperations.tagWorkspace(basedir, "${project.groupId}_${project.artifactId}_${buildNumber}")
+			log.info("workspace tagged")
 		}
 // 		SHOULD BE USED In perform stage				
 //		log.info("Changing pom files")
@@ -111,6 +114,9 @@ class ReleasePrepareMojo extends GroovyMojoWithAntLogger{
 	}
 	ScmOperations createScmOperations(String scmUrl){
 		ScmRepository repository = scmManager.makeScmRepository(scmUrl)
-		ScmOperations operations = new DefaultScmOperations(scmRepository: repository)
+		if(repository == null){
+			throw new IllegalArgumentException("Cannot makeScmRepository from url: ${scmUrl}")
+		}
+		ScmOperations operations = new DefaultScmOperations(scmRepository: repository, scmManager: scmManager)
 	}
 }
